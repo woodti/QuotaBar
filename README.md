@@ -2,6 +2,8 @@
 
 原生 macOS 菜单栏 AI 额度工具。SwiftUI + AppKit，MIT 开源，无第三方运行依赖、无遥测、无自建服务器。
 
+[下载已公证 Apple 芯片版](https://github.com/woodti/QuotaBar/releases/latest) · [反馈问题](https://github.com/woodti/QuotaBar/issues) · [参与贡献](CONTRIBUTING.md)
+
 ## 功能
 
 - Codex：通过官方 `codex app-server` 的 `account/rateLimits/read` 查询账户用量，默认每 60 秒刷新，可选 30 / 120 秒。
