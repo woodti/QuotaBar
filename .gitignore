@@ -1,0 +1,13 @@
+.build/
+.swiftpm/
+dist/
+.DS_Store
+*.xcuserstate
+*.xcarchive/
+*.xcdistributionlogs/
+*.p12
+*.p8
+*.key
+*.pem
+.env
+.env.*
