@@ -138,6 +138,10 @@ import QuotaCore
         guard let url = URL(string: "https://github.com/woodti/QuotaBar/releases/latest") else { return }
         NSWorkspace.shared.open(url)
     }
+    func openFeedback() {
+        guard let url = URL(string: "https://github.com/woodti/QuotaBar/issues/new") else { return }
+        NSWorkspace.shared.open(url)
+    }
     func toggleLogin(_ enabled: Bool) {
         do {
             if enabled { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }

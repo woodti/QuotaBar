@@ -200,6 +200,7 @@ struct Panel: View {
                 Button("打开设置") { store.settings = true }.controlSize(.small)
                 Button("重试") { store.refresh() }.controlSize(.small)
                 Button("复制诊断信息") { store.copyDiagnostics() }.controlSize(.small)
+                Button("提交问题") { store.openFeedback() }.controlSize(.small)
             }
         }
     }
