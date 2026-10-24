@@ -52,7 +52,7 @@ public enum CodexClient {
             }
             throw QuotaError.message("Codex 请求超时。稍后自动重试。")
         }
-        try send(["id": 1, "method": "initialize", "params": ["clientInfo": ["name": "quotabar", "title": "QuotaBar", "version": "0.2.1"]]])
+        try send(["id": 1, "method": "initialize", "params": ["clientInfo": ["name": "quotabar", "title": "QuotaBar", "version": "0.2.2"]]])
         let initialized = try response(id: 1)
         if let root = try JSONSerialization.jsonObject(with: initialized) as? [String: Any], root["error"] != nil { throw QuotaError.message("Codex 初始化失败，请升级 Codex CLI") }
         try send(["method": "initialized"])

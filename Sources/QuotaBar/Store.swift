@@ -104,6 +104,23 @@ import QuotaCore
         let panel = NSOpenPanel(); panel.canChooseDirectories = false; panel.message = "选择 Codex 可执行文件"
         if panel.runModal() == .OK, let url = panel.url { codexPath = url.path; refresh() }
     }
+    func copyDiagnostics() {
+        let selectedPath = codexPath.isEmpty ? "自动查找" : URL(fileURLWithPath: codexPath).lastPathComponent
+        let detected = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
+        let snapshotSummary = snapshots.map { "\($0.id):\($0.windows.count) 个窗口" }.joined(separator: ", ")
+        let text = [
+            "QuotaBar 0.2.2",
+            "macOS：\(ProcessInfo.processInfo.operatingSystemVersionString)",
+            "Codex 路径：\(selectedPath)",
+            "检测到 Codex：\(detected)",
+            "刷新间隔：\(Int(interval)) 秒",
+            "已有数据：\(snapshotSummary.isEmpty ? "无" : snapshotSummary)",
+            "错误：\(codexError ?? "无")"
+        ].joined(separator: "\n")
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        notice = "诊断信息已复制。提交问题时请确认其中没有你不想公开的本地路径。"
+    }
     func openProviders() {
         do { try LocalStore.prepare(); NSWorkspace.shared.open(LocalStore.providersURL) }
         catch { notice = error.localizedDescription }
