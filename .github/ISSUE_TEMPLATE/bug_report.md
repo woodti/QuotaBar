@@ -1,6 +1,6 @@
 ---
 name: Bug report
-a about: 报告额度读取、Claude 接入或界面问题
+about: 报告额度读取、Claude 接入或界面问题
 title: "[Bug] "
 labels: bug
 assignees: ""
