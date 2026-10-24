@@ -162,7 +162,17 @@ struct Panel: View {
             Text("Codex 路径").font(.system(size: 12, weight: .semibold))
             Text(store.codexPath.isEmpty ? "自动查找已安装的 Codex" : store.codexPath).font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(3)
             HStack { Button("选择文件…") { store.chooseCodex() }; Button("恢复自动查找") { store.codexPath = ""; store.refresh() } }.controlSize(.small)
-            Button("接入 Claude Code（保留现有状态栏）") { store.connectClaude() }.controlSize(.small)
+            Divider()
+            Text("Claude Code 状态").font(.system(size: 12, weight: .semibold))
+            if store.claudeBridgeInstalled {
+                Label(store.snapshots.contains(where: { $0.id == "claude" && !$0.windows.isEmpty }) ? "已接入，额度已同步" : "已接入，等待一次 Claude 对话", systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(.green).font(.system(size: 11))
+                Text("Claude 只有在首次 API 响应后才会提供额度字段。完成一次对话后，QuotaBar 会自动更新。")
+                    .font(.system(size: 10)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            } else {
+                Label("尚未接入", systemImage: "circle").foregroundStyle(.secondary).font(.system(size: 11))
+            }
+            Button(store.claudeBridgeInstalled ? "重新接入 Claude Code" : "接入 Claude Code") { store.connectClaude() }.controlSize(.small)
             Divider()
             Text("添加其他服务").font(.system(size: 12, weight: .semibold))
             Text("将符合 QuotaBar 格式的 JSON 文件写入数据源文件夹。程序每 2 秒读取一次；适配器负责获取数据并更新 observedAt。").font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)

@@ -50,6 +50,15 @@ import QuotaCore
             return (id == "codex" ? "CX " : "CL ") + (value.map { "\(Int($0.rounded(.down)))%" } ?? "—")
         }.joined(separator: "  ")
     }
+    var claudeBridgeInstalled: Bool {
+        let configHome = ProcessInfo.processInfo.environment["CLAUDE_CONFIG_DIR"].map { URL(fileURLWithPath: $0) } ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".claude")
+        let url = configHome.appendingPathComponent("settings.json")
+        guard let data = try? Data(contentsOf: url),
+              let settings = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let status = settings["statusLine"] as? [String: Any],
+              let command = status["command"] as? String else { return false }
+        return command.contains("--claude-statusline")
+    }
     func refresh() {
         guard !refreshing, !demo else { return }
         refreshing = true; lastAttempt = Date(); let path = codexPath
