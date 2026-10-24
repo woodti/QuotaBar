@@ -17,7 +17,15 @@
 
 ## 安装
 
-需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从本仓库 Releases 下载 `QuotaBar-0.2.0-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
+需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从 [最新 Release](https://github.com/woodti/QuotaBar/releases/latest) 下载 `QuotaBar-0.2.1-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
+
+首次使用：
+
+1. 先在终端运行 `codex login`，使用 ChatGPT 账户完成登录。
+2. 打开 QuotaBar，等待自动刷新；也可以点击右上角刷新按钮。
+3. 如果仍然没有额度，打开设置确认 Codex 路径，或在设置中选择实际的 `codex` 可执行文件。
+
+QuotaBar 只读取 Codex CLI 自己的登录状态，不会复制凭证。读取失败时，面板会保留旧数据并显示“打开设置”和“重试”入口；请在提交问题时附上错误文字、macOS 版本和 Codex 版本，不要附带 token、Cookie 或账户文件。
 
 正式发布包已使用 Developer ID 签名并通过 Apple 公证。支持显示账户实际提供的额度窗口；套餐不提供 5 小时限额时不会显示该窗口。
 
