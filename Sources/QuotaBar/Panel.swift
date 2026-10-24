@@ -178,7 +178,7 @@ struct Panel: View {
             Text("将符合 QuotaBar 格式的 JSON 文件写入数据源文件夹。程序每 2 秒读取一次；适配器负责获取数据并更新 observedAt。").font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             Button("打开数据源文件夹") { store.openProviders() }.controlSize(.small)
             Button("查看最新版本和更新说明") { store.openLatestRelease() }.controlSize(.small)
-            Text("QuotaBar 0.2.2 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
+            Text("QuotaBar 0.2.3 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
         }.font(.system(size: 12))
     }
     private var welcomeCard: some View {
