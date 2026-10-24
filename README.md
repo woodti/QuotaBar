@@ -44,6 +44,17 @@ brew install --cask quotabar
 
 Cask 会下载同一个已签名、公证的 DMG，并要求 Apple Silicon 和 macOS 13+。卸载使用 `brew uninstall --cask quotabar`。
 
+### English quick start
+
+Download the latest notarized Apple Silicon DMG from [Releases](https://github.com/woodti/QuotaBar/releases/latest), open it, and drag QuotaBar to Applications. Or install it with Homebrew:
+
+```sh
+brew tap woodti/tap
+brew install --cask quotabar
+```
+
+For Codex, run `codex login` first, then open QuotaBar and press refresh. For Claude Code, click “接入 Claude Code” in Settings, start one Claude conversation, and wait for the first API response. The app reads local status data and does not upload prompts, code, or credentials.
+
 ### Codex
 
 先安装 Codex CLI 并使用 ChatGPT 账户完成 `codex login`；也会尝试检测常见 Codex / ChatGPT 桌面安装位置。非标准安装可在设置中选择 Codex 可执行文件。应用复用 CLI 自己管理的登录状态，不复制凭证。
