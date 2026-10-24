@@ -31,8 +31,11 @@ struct Panel: View {
                     if store.settings { preferences }
                     else if store.dashboard { DashboardView(store: store) }
                     else {
+                        if store.snapshots.isEmpty && store.codexError == nil && store.localError == nil {
+                            welcomeCard
+                        }
                         ForEach(store.snapshots) { snapshot in card(snapshot) }
-                        if let error = store.codexError { message("Codex 暂时不可用", error, icon: "exclamationmark.arrow.triangle.2.circlepath") }
+                        if let error = store.codexError { errorCard(error) }
                         if !store.snapshots.contains(where: { $0.id == "claude" }) {
                             VStack(alignment: .leading, spacing: 10) {
                                 Label("连接 Claude", systemImage: "sparkle").font(.system(size: 13, weight: .semibold))
@@ -164,7 +167,28 @@ struct Panel: View {
             Text("添加其他服务").font(.system(size: 12, weight: .semibold))
             Text("将符合 QuotaBar 格式的 JSON 文件写入数据源文件夹。程序每 2 秒读取一次；适配器负责获取数据并更新 observedAt。").font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             Button("打开数据源文件夹") { store.openProviders() }.controlSize(.small)
-            Text("QuotaBar 0.1.0 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
+            Text("QuotaBar 0.2.1 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
         }.font(.system(size: 12))
+    }
+    private var welcomeCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("先连接你的额度账户", systemImage: "sparkles").font(.system(size: 13, weight: .semibold))
+            Text("QuotaBar 会读取本机 Codex 登录状态，不会上传提示词、代码或会话内容。先完成 Codex 登录，再点击刷新即可。")
+                .font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: 8) {
+                Button("打开设置") { store.settings = true }.controlSize(.small)
+                Button("立即刷新") { store.refresh() }.controlSize(.small)
+            }
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(16)
+            .background(mint.opacity(0.09), in: RoundedRectangle(cornerRadius: 12))
+    }
+    private func errorCard(_ error: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            message("Codex 暂时不可用", error, icon: "exclamationmark.arrow.triangle.2.circlepath")
+            HStack(spacing: 8) {
+                Button("打开设置") { store.settings = true }.controlSize(.small)
+                Button("重试") { store.refresh() }.controlSize(.small)
+            }
+        }
     }
 }
