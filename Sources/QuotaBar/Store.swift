@@ -118,7 +118,7 @@ import QuotaCore
         let detected = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
         let snapshotSummary = snapshots.map { "\($0.id):\($0.windows.count) 个窗口" }.joined(separator: ", ")
         let text = [
-            "QuotaBar 0.2.5",
+            "QuotaBar 0.2.6",
             "macOS：\(ProcessInfo.processInfo.operatingSystemVersionString)",
             "Codex 路径：\(selectedPath)",
             "检测到 Codex：\(detected)",

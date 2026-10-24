@@ -19,7 +19,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <key>CFBundleName</key><string>QuotaBar</string>
 <key>CFBundleDisplayName</key><string>QuotaBar</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleShortVersionString</key><string>0.2.5</string>
+<key>CFBundleShortVersionString</key><string>0.2.6</string>
 <key>CFBundleVersion</key><string>1</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>
 <key>LSUIElement</key><true/>
@@ -32,7 +32,7 @@ if [[ -n "${SIGN_IDENTITY:-}" ]]; then
 else
     codesign --force --sign - "$APP"
 fi
-ZIP="$DEST/QuotaBar-0.2.5-macos-$ARCH.zip"
+ZIP="$DEST/QuotaBar-0.2.6-macos-$ARCH.zip"
 ditto -c -k --keepParent "$APP" "$ZIP"
 if [[ -n "${NOTARY_PROFILE:-}" ]]; then
     xcrun notarytool submit "$ZIP" --keychain-profile "$NOTARY_PROFILE" --wait
