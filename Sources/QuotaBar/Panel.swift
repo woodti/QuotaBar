@@ -75,6 +75,17 @@ struct Panel: View {
                 Spacer()
                 Text(stale ? "旧数据" : "已同步").font(.system(size: 9, weight: .medium)).foregroundStyle(stale ? Color.orange : accent).padding(.horizontal, 7).padding(.vertical, 4).background((stale ? Color.orange : accent).opacity(0.1), in: Capsule())
             }
+            if snapshot.id == "codex", snapshot.planType != nil || snapshot.authStatus != nil {
+                HStack(spacing: 7) {
+                    if let plan = snapshot.planType {
+                        Text(planDisplay(plan)).font(.system(size: 10, weight: .semibold)).foregroundStyle(accent).padding(.horizontal, 8).padding(.vertical, 4).background(accent.opacity(0.1), in: Capsule())
+                    }
+                    if snapshot.authStatus == "authorized" {
+                        Label("已授权", systemImage: "checkmark.shield.fill").font(.system(size: 10, weight: .medium)).foregroundStyle(.green)
+                    }
+                    Spacer()
+                }
+            }
             if snapshot.windows.isEmpty {
                 Text("暂未收到额度。请在支持额度的 Claude Code 订阅账户中完成一次对话。").font(.system(size: 11)).foregroundStyle(.secondary)
             }
@@ -113,6 +124,18 @@ struct Panel: View {
         if minutes >= 1440 { return "\(minutes / 1440) 天 \((minutes % 1440) / 60) 小时后重置" }
         if minutes >= 60 { return "\(minutes / 60) 小时 \(minutes % 60) 分钟后重置" }
         return "\(minutes) 分钟后重置"
+    }
+    private func planDisplay(_ raw: String) -> String {
+        switch raw.lowercased() {
+        case "free", "basic": return "基础版"
+        case "plus": return "Plus"
+        case "pro": return "Pro"
+        case "prolite": return "Pro Lite"
+        case "team": return "Team"
+        case "business": return "Business"
+        case "enterprise": return "Enterprise"
+        default: return raw.uppercased()
+        }
     }
     private func message(_ title: String, _ body: String, icon: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {

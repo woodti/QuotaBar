@@ -2,10 +2,11 @@ import XCTest
 @testable import QuotaCore
 final class QuotaCoreTests: XCTestCase {
     func testMultipleBucketsAndLegacyFallback() throws {
-        let data = Data(#"{"result":{"rateLimits":{"primary":{"usedPercent":99}},"rateLimitsByLimitId":{"codex":{"primary":{"usedPercent":25,"windowDurationMins":300,"resetsAt":1900000000}},"other":{"secondary":{"usedPercent":60,"windowDurationMins":10080}}}}}"#.utf8)
+        let data = Data(#"{"result":{"rateLimits":{"planType":"pro","primary":{"usedPercent":99}},"rateLimitsByLimitId":{"codex":{"primary":{"usedPercent":25,"windowDurationMins":300,"resetsAt":1900000000}},"other":{"secondary":{"usedPercent":60,"windowDurationMins":10080}}}}}"#.utf8)
         let s = try QuotaParser.codex(data)
         XCTAssertEqual(s.windows.count, 2); XCTAssertEqual(s.windows[0].remaining, 75)
         XCTAssertTrue(s.windows[1].label.contains("7 天"))
+        XCTAssertEqual(s.planType, "pro"); XCTAssertEqual(s.authStatus, "authorized")
         let fallback = try QuotaParser.codex(Data(#"{"rateLimits":{"primary":{"usedPercent":0}}}"#.utf8))
         XCTAssertEqual(fallback.windows[0].remaining, 100)
     }

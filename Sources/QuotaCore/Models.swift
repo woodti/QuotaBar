@@ -16,8 +16,10 @@ public struct QuotaSnapshot: Codable, Identifiable {
     public var name: String
     public var observedAt: Date
     public var windows: [QuotaWindow]
-    public init(id: String, name: String, observedAt: Date = Date(), windows: [QuotaWindow]) {
-        self.id = id; self.name = name; self.observedAt = observedAt; self.windows = windows
+    public var planType: String?
+    public var authStatus: String?
+    public init(id: String, name: String, observedAt: Date = Date(), windows: [QuotaWindow], planType: String? = nil, authStatus: String? = nil) {
+        self.id = id; self.name = name; self.observedAt = observedAt; self.windows = windows; self.planType = planType; self.authStatus = authStatus
     }
     public func stale(at now: Date = Date()) -> Bool { now.timeIntervalSince(observedAt) > 180 || observedAt > now.addingTimeInterval(60) }
     public func visibleRemaining(at now: Date = Date()) -> Double? {
@@ -53,7 +55,10 @@ public enum QuotaParser {
             }
         }
         guard !windows.isEmpty else { throw QuotaError.message("当前账户没有可显示的百分比额度窗口") }
-        return QuotaSnapshot(id: "codex", name: "Codex", observedAt: now, windows: windows)
+        let planType = (result["rateLimits"] as? [String: Any])?["planType"] as? String
+            ?? buckets.compactMap { $0.1["planType"] as? String }.first
+            ?? (result["planType"] as? String)
+        return QuotaSnapshot(id: "codex", name: "Codex", observedAt: now, windows: windows, planType: planType, authStatus: "authorized")
     }
     public static func claude(_ data: Data, now: Date = Date()) throws -> QuotaSnapshot {
         guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { throw QuotaError.message("Claude 数据格式无效") }
@@ -62,7 +67,7 @@ public enum QuotaParser {
             guard let w = limits[key] as? [String: Any], let used = number(w["used_percentage"]) else { return nil }
             return QuotaWindow(id: key, label: label, usedPercent: used, resetsAt: number(w["resets_at"]).map { Date(timeIntervalSince1970: $0) })
         }
-        return QuotaSnapshot(id: "claude", name: "Claude", observedAt: now, windows: windows)
+        return QuotaSnapshot(id: "claude", name: "Claude", observedAt: now, windows: windows, authStatus: "local-sync")
     }
     private static func number(_ value: Any?) -> Double? {
         guard let n = value as? NSNumber, CFGetTypeID(n) != CFBooleanGetTypeID(), n.doubleValue.isFinite else { return nil }
