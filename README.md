@@ -25,6 +25,17 @@
 
 自行构建且未提供签名配置的产物只有 ad-hoc 签名，未经过 Apple Developer ID 签名和公证。通过网络分发后，Gatekeeper 可能拦截；可信来源可按 macOS「隐私与安全性」中的系统提示允许打开，或从源码自行构建。面向公众免提示分发，维护者应使用自己的 Apple Developer ID 签名并公证，见下文。源码不包含任何证书或登录信息。
 
+### Homebrew 安装（Apple Silicon）
+
+这台开发机使用 Apple Silicon，所以公开发布只提供 arm64 DMG。已提供 Homebrew Cask：
+
+```sh
+brew tap woodti/tap
+brew install --cask quotabar
+```
+
+Cask 会下载同一个已签名、公证的 DMG，并要求 Apple Silicon 和 macOS 13+。卸载使用 `brew uninstall --cask quotabar`。
+
 ### Codex
 
 先安装 Codex CLI 并使用 ChatGPT 账户完成 `codex login`；也会尝试检测常见 Codex / ChatGPT 桌面安装位置。非标准安装可在设置中选择 Codex 可执行文件。应用复用 CLI 自己管理的登录状态，不复制凭证。
