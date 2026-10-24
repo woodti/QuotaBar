@@ -2,7 +2,7 @@
 
 原生 macOS 菜单栏 AI 额度工具。SwiftUI + AppKit，MIT 开源，无第三方运行依赖、无遥测、无自建服务器。
 
-[下载已公证 Apple 芯片版](https://github.com/woodti/QuotaBar/releases/latest) · [反馈问题](https://github.com/woodti/QuotaBar/issues) · [参与贡献](CONTRIBUTING.md)
+[下载已公证 Apple 芯片版 DMG](https://github.com/woodti/QuotaBar/releases/latest) · [ZIP 备用下载](https://github.com/woodti/QuotaBar/releases/latest) · [反馈问题](https://github.com/woodti/QuotaBar/issues) · [参与贡献](CONTRIBUTING.md)
 
 ## 功能
 
@@ -16,7 +16,7 @@
 
 ## 安装
 
-需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从本仓库 Releases 下载 `QuotaBar-0.1.0-macos-arm64-notarized.zip`，解压，将 `QuotaBar.app` 移至 `/Applications`，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
+需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从本仓库 Releases 下载 `QuotaBar-0.1.0-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。也提供 ZIP 备用下载。菜单栏会出现图表图标和 `CX` / `CL` 额度。
 
 正式发布包已使用 Developer ID 签名并通过 Apple 公证。支持显示账户实际提供的额度窗口；套餐不提供 5 小时限额时不会显示该窗口。
 
