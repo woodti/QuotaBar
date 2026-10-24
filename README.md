@@ -162,6 +162,8 @@ NOTARY_PROFILE='your-notary-profile' \
 
 Codex 请求通过用户已安装的官方 CLI 发出，不创建对话或调用模型。每次请求有 20 秒超时，结束后关闭子进程。CLI 自身的联网及日志行为由其配置决定。
 
+QuotaBar 本身不包含网络客户端、遥测或账户上传服务。Codex 的网络请求由官方 Codex CLI 发出，Claude 的额度由 Claude Code 通过 statusLine 本地传给 QuotaBar；“查看最新版本”和“提交问题”只会在你点击按钮后打开 GitHub 浏览器页面。
+
 Claude 桥接只写入 `~/Library/Application Support/QuotaBar/claude.json` 的归一化额度快照。原有状态栏命令的行为仍由用户自己的配置决定。QuotaBar 没有分析统计、遥测、广告或账户上传服务。
 
 ## 上游文档
