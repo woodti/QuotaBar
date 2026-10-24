@@ -118,7 +118,7 @@ import QuotaCore
         let detected = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
         let snapshotSummary = snapshots.map { "\($0.id):\($0.windows.count) 个窗口" }.joined(separator: ", ")
         let text = [
-            "QuotaBar 0.2.4",
+            "QuotaBar 0.2.5",
             "macOS：\(ProcessInfo.processInfo.operatingSystemVersionString)",
             "Codex 路径：\(selectedPath)",
             "检测到 Codex：\(detected)",
@@ -144,7 +144,9 @@ import QuotaCore
     }
     func runSelfCheck() {
         let codex = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
-        var lines = ["连接检查", "Codex：\(codex)", "Claude 接入：\(claudeBridgeInstalled ? "已接入" : "未接入")"]
+        let codexSnapshot = snapshots.first(where: { $0.id == "codex" })
+        let codexAccount = codexError.map { "读取失败：\($0)" } ?? (codexSnapshot?.authStatus == "authorized" ? "已登录并读到额度" : codex == "未找到" ? "尚未检查" : "已找到程序，等待额度")
+        var lines = ["连接检查", "Codex 程序：\(codex)", "Codex 账户：\(codexAccount)", "Claude statusLine：\(claudeBridgeInstalled ? "已接入" : "未接入")"]
         if let data = try? Data(contentsOf: LocalStore.claudeURL),
            let snapshot = try? QuotaParser.decodeSnapshot(data), !snapshot.windows.isEmpty {
             lines.append("Claude 额度：已收到 \(snapshot.windows.count) 个窗口")
