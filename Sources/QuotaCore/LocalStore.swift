@@ -30,11 +30,18 @@ public enum LocalStore {
         guard size <= 1_000_000 else { throw QuotaError.message("额度文件超过 1 MB") }
         return try QuotaParser.decodeSnapshot(Data(contentsOf: url))
     }
-    public static func writeClaude(_ input: Data) throws -> QuotaSnapshot {
+    public static func writeClaude(_ input: Data, storageURL: URL? = nil) throws -> QuotaSnapshot {
         let snapshot = try QuotaParser.claude(input)
+        let destination = storageURL ?? claudeURL
+        // Claude statusLine can be invoked before an API response is available.
+        // Do not replace a known-good snapshot with that empty observation.
+        if snapshot.windows.isEmpty, FileManager.default.fileExists(atPath: destination.path) {
+            return snapshot
+        }
         try prepare()
-        try QuotaParser.encode(snapshot).write(to: claudeURL, options: .atomic)
-        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: claudeURL.path)
+        try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try QuotaParser.encode(snapshot).write(to: destination, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: destination.path)
         return snapshot
     }
     public static func shellQuote(_ value: String) -> String { "'" + value.replacingOccurrences(of: "'", with: "'\\''") + "'" }

@@ -24,6 +24,17 @@ final class QuotaCoreTests: XCTestCase {
         let encoded = String(decoding: try QuotaParser.encode(s), as: UTF8.self)
         XCTAssertFalse(encoded.contains("session_id"))
     }
+    func testClaudeEmptyStatuslineDoesNotEraseCachedQuota() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let original = directory.appendingPathComponent("claude.json")
+        let snapshot = try QuotaParser.claude(Data(#"{"rate_limits":{"five_hour":{"used_percentage":17.5}}}"#.utf8))
+        try QuotaParser.encode(snapshot).write(to: original, options: .atomic)
+        _ = try LocalStore.writeClaude(Data("{}".utf8), storageURL: original)
+        let cached = try QuotaParser.decodeSnapshot(Data(contentsOf: original))
+        XCTAssertEqual(cached.windows.first?.remaining, 82.5)
+    }
     func testExpiredAndStaleNeverPretendToReset() {
         let now = Date()
         let expired = QuotaWindow(id: "a", label: "a", usedPercent: 80, resetsAt: now.addingTimeInterval(-1))
