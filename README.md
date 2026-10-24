@@ -29,6 +29,15 @@ QuotaBar 只读取 Codex CLI 自己的登录状态，不会复制凭证。读取
 
 正式发布包已使用 Developer ID 签名并通过 Apple 公证。支持显示账户实际提供的额度窗口；套餐不提供 5 小时限额时不会显示该窗口。
 
+| 项目 | 要求和表现 |
+| --- | --- |
+| 芯片 | Apple Silicon（M 系列，arm64）；当前 Release 不提供 Intel 版本 |
+| 系统 | macOS 13 或以上 |
+| Codex | 已安装 Codex CLI，并使用 `codex login` 登录 ChatGPT 账户 |
+| Claude Code | 已安装 Claude Code；完成一次 API 对话后才会出现 `rate_limits` |
+| 额度窗口 | 按服务实际返回显示；没有 5 小时窗口时不会人为补出 |
+| 数据位置 | 额度快照和历史只保存在本机 |
+
 ![QuotaBar 界面预览（示例数据）](docs/preview.png)
 
 自行构建且未提供签名配置的产物只有 ad-hoc 签名，未经过 Apple Developer ID 签名和公证。通过网络分发后，Gatekeeper 可能拦截；可信来源可按 macOS「隐私与安全性」中的系统提示允许打开，或从源码自行构建。面向公众免提示分发，维护者应使用自己的 Apple Developer ID 签名并公证，见下文。源码不包含任何证书或登录信息。
