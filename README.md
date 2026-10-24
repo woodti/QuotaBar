@@ -17,7 +17,7 @@
 
 ## 安装
 
-需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从 [最新 Release](https://github.com/woodti/QuotaBar/releases/latest) 下载 `QuotaBar-0.2.3-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
+需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从 [最新 Release](https://github.com/woodti/QuotaBar/releases/latest) 下载 `QuotaBar-0.2.4-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
 
 首次使用：
 
