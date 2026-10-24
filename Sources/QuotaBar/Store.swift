@@ -142,6 +142,18 @@ import QuotaCore
         guard let url = URL(string: "https://github.com/woodti/QuotaBar/issues/new") else { return }
         NSWorkspace.shared.open(url)
     }
+    func runSelfCheck() {
+        let codex = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
+        var lines = ["连接检查", "Codex：\(codex)", "Claude 接入：\(claudeBridgeInstalled ? "已接入" : "未接入")"]
+        if let data = try? Data(contentsOf: LocalStore.claudeURL),
+           let snapshot = try? QuotaParser.decodeSnapshot(data), !snapshot.windows.isEmpty {
+            lines.append("Claude 额度：已收到 \(snapshot.windows.count) 个窗口")
+        } else {
+            lines.append("Claude 额度：等待一次 Claude Code 对话")
+        }
+        lines.append("下一步：Codex 未找到时选择可执行文件；Claude 等待额度时完成一次对话。")
+        notice = lines.joined(separator: "\n")
+    }
     func toggleLogin(_ enabled: Bool) {
         do {
             if enabled { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
