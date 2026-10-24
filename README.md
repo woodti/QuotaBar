@@ -4,6 +4,15 @@
 
 [下载已公证 Apple 芯片版 DMG](https://github.com/woodti/QuotaBar/releases/latest) · [反馈问题](https://github.com/woodti/QuotaBar/issues) · [参与贡献](CONTRIBUTING.md)
 
+打开菜单栏就能看到当前最低剩余额度；需要更多信息时，使用看板查看趋势、消耗速度、重置节奏和使用建议。下面是完全虚构的示例数据：
+
+| 数据源 | 当前显示 | 看板能回答的问题 |
+| --- | --- | --- |
+| Codex Pro | 7 天窗口剩余 97% | 最近几天消耗速度是否变快？ |
+| Claude Code | 5 小时剩余 84%，7 天剩余 63% | 现在适合继续长任务，还是等待窗口重置？ |
+
+![QuotaBar 示例界面（虚构数据）](docs/preview.png)
+
 ## 功能
 
 - Codex：通过官方 `codex app-server` 的 `account/rateLimits/read` 查询账户用量，默认每 60 秒刷新，可选 30 / 120 秒。
@@ -37,8 +46,6 @@ QuotaBar 只读取 Codex CLI 自己的登录状态，不会复制凭证。读取
 | Claude Code | 已安装 Claude Code；完成一次 API 对话后才会出现 `rate_limits` |
 | 额度窗口 | 按服务实际返回显示；没有 5 小时窗口时不会人为补出 |
 | 数据位置 | 额度快照和历史只保存在本机 |
-
-![QuotaBar 界面预览（示例数据）](docs/preview.png)
 
 自行构建且未提供签名配置的产物只有 ad-hoc 签名，未经过 Apple Developer ID 签名和公证。通过网络分发后，Gatekeeper 可能拦截；可信来源可按 macOS「隐私与安全性」中的系统提示允许打开，或从源码自行构建。面向公众免提示分发，维护者应使用自己的 Apple Developer ID 签名并公证，见下文。源码不包含任何证书或登录信息。
 
