@@ -134,6 +134,10 @@ import QuotaCore
         do { try LocalStore.prepare(); NSWorkspace.shared.open(LocalStore.providersURL) }
         catch { notice = error.localizedDescription }
     }
+    func openLatestRelease() {
+        guard let url = URL(string: "https://github.com/woodti/QuotaBar/releases/latest") else { return }
+        NSWorkspace.shared.open(url)
+    }
     func toggleLogin(_ enabled: Bool) {
         do {
             if enabled { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
