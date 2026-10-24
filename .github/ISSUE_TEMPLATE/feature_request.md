@@ -1,6 +1,6 @@
 ---
 name: Feature request
-a bout: 提议新的额度窗口、数据源或界面功能
+about: 提议新的额度窗口、数据源或界面功能
 title: "[Feature] "
 labels: enhancement
 assignees: ""
