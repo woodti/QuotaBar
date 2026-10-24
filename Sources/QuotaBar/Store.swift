@@ -145,7 +145,12 @@ import QuotaCore
     func runSelfCheck() {
         let codex = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
         let codexSnapshot = snapshots.first(where: { $0.id == "codex" })
-        let codexAccount = codexError.map { "读取失败：\($0)" } ?? (codexSnapshot?.authStatus == "authorized" ? "已登录并读到额度" : codex == "未找到" ? "尚未检查" : "已找到程序，等待额度")
+        let codexAccount: String
+        if let error = codexError { codexAccount = "读取失败：\(error)" }
+        else if let snapshot = codexSnapshot, snapshot.stale(at: now) { codexAccount = "已有旧数据，点击刷新" }
+        else if codexSnapshot?.authStatus == "authorized" { codexAccount = "已登录并读到额度" }
+        else if codex == "未找到" { codexAccount = "尚未检查" }
+        else { codexAccount = "已找到程序，等待额度" }
         var lines = ["连接检查", "Codex 程序：\(codex)", "Codex 账户：\(codexAccount)", "Claude statusLine：\(claudeBridgeInstalled ? "已接入" : "未接入")"]
         if let data = try? Data(contentsOf: LocalStore.claudeURL),
            let snapshot = try? QuotaParser.decodeSnapshot(data), !snapshot.windows.isEmpty {
