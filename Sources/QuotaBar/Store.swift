@@ -9,8 +9,10 @@ import QuotaCore
     @Published var localError: String?
     @Published var refreshing = false
     @Published var settings = false
+    @Published var dashboard = false
     @Published var notice: String?
     @Published var now = Date()
+    @Published var history: [QuotaHistorySample] = []
     @Published var interval: Double = UserDefaults.standard.double(forKey: "interval") == 0 ? 60 : UserDefaults.standard.double(forKey: "interval") {
         didSet { UserDefaults.standard.set(interval, forKey: "interval") }
     }
@@ -28,8 +30,10 @@ import QuotaCore
         self.demo = demo
         if demo {
             snapshots = [QuotaSnapshot(id: "codex", name: "Codex", windows: [QuotaWindow(id: "5h", label: "5 小时", usedPercent: 28, resetsAt: Date().addingTimeInterval(7920)), QuotaWindow(id: "7d", label: "7 天", usedPercent: 46, resetsAt: Date().addingTimeInterval(280000))]), QuotaSnapshot(id: "claude", name: "Claude", windows: [QuotaWindow(id: "5h", label: "5 小时", usedPercent: 16, resetsAt: Date().addingTimeInterval(12500)), QuotaWindow(id: "7d", label: "7 天", usedPercent: 37, resetsAt: Date().addingTimeInterval(410000))])]
+            history = demoHistory()
             return
         }
+        history = (try? LocalStore.readHistory()) ?? []
         readLocal(); refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
             Task { @MainActor in
@@ -54,6 +58,7 @@ import QuotaCore
             switch result {
             case .success(let snapshot):
                 snapshots.removeAll { $0.id == "codex" }; snapshots.insert(snapshot, at: 0); codexError = nil
+                record(snapshot)
             case .failure(let error): codexError = error.localizedDescription
             }
             refreshing = false; now = Date(); readLocal()
@@ -74,7 +79,21 @@ import QuotaCore
             }
         }
         snapshots = snapshots.filter { $0.id == "codex" } + local
+        local.forEach { record($0) }
         localError = issues.isEmpty ? nil : issues.joined(separator: "\n")
+    }
+    private func record(_ snapshot: QuotaSnapshot) {
+        let now = Date()
+        let fresh = snapshot.windows.filter { window in !history.contains { $0.provider == snapshot.id && $0.windowID == window.id && now.timeIntervalSince($0.date) < 240 } }
+        guard !fresh.isEmpty else { return }
+        history.append(contentsOf: fresh.map { QuotaHistorySample(date: now, provider: snapshot.id, windowID: $0.id, label: $0.label, remaining: $0.remaining, resetsAt: $0.resetsAt) })
+        history = history.filter { $0.date > now.addingTimeInterval(-30 * 86_400) }.suffix(5_000)
+        try? LocalStore.writeHistory(history)
+    }
+    private func demoHistory() -> [QuotaHistorySample] {
+        let now = Date(); return stride(from: 6, through: 0, by: -1).flatMap { day in
+            [QuotaHistorySample(date: now.addingTimeInterval(Double(-day) * 86_400), provider: "codex", windowID: "7d", label: "7 天", remaining: min(100, 48 + Double(6 - day) * 7), resetsAt: now.addingTimeInterval(280_000))]
+        }
     }
     func connectClaude() {
         guard let executable = Bundle.main.executablePath else { return }

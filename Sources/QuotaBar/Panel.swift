@@ -17,17 +17,19 @@ struct Panel: View {
                 Button { store.refresh() } label: {
                     Image(systemName: "arrow.clockwise").font(.system(size: 14, weight: .medium))
                 }.buttonStyle(.plain).disabled(store.refreshing || store.demo).help("刷新 Codex 额度")
+                Button { store.dashboard.toggle(); store.settings = false } label: { Image(systemName: store.dashboard ? "xmark" : "chart.xyaxis.line").font(.system(size: 14)) }.buttonStyle(.plain).padding(.leading, 8).help(store.dashboard ? "返回额度" : "使用看板")
                 Button { store.settings.toggle() } label: { Image(systemName: "slider.horizontal.3").font(.system(size: 14)) }.buttonStyle(.plain).padding(.leading, 8).help("设置")
             }.padding(20)
             Divider()
             ScrollView {
                 VStack(spacing: 12) {
                     HStack {
-                        Text(store.settings ? "偏好设置" : "剩余额度").font(.system(size: 11, weight: .semibold)).foregroundStyle(.secondary)
+                        Text(store.settings ? "偏好设置" : store.dashboard ? "使用看板" : "剩余额度").font(.system(size: 11, weight: .semibold)).foregroundStyle(.secondary)
                         Spacer()
                         if !store.settings { Circle().fill(mint).frame(width: 5, height: 5); Text(store.refreshing ? "正在更新" : "自动同步").font(.system(size: 10)).foregroundStyle(.secondary) }
                     }
                     if store.settings { preferences }
+                    else if store.dashboard { DashboardView(store: store) }
                     else {
                         ForEach(store.snapshots) { snapshot in card(snapshot) }
                         if let error = store.codexError { message("Codex 暂时不可用", error, icon: "exclamationmark.arrow.triangle.2.circlepath") }

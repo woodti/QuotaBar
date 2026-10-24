@@ -87,3 +87,16 @@ public enum QuotaParser {
     }
 }
 import CoreFoundation
+
+public struct QuotaHistorySample: Codable, Identifiable, Equatable {
+    public var date: Date
+    public var provider: String
+    public var windowID: String
+    public var label: String
+    public var remaining: Double
+    public var resetsAt: Date?
+    public var id: String { "\(provider).\(windowID).\(date.timeIntervalSince1970)" }
+    public init(date: Date = Date(), provider: String, windowID: String, label: String, remaining: Double, resetsAt: Date? = nil) {
+        self.date = date; self.provider = provider; self.windowID = windowID; self.label = label; self.remaining = remaining; self.resetsAt = resetsAt
+    }
+}

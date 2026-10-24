@@ -5,10 +5,26 @@ public enum LocalStore {
     }
     public static var claudeURL: URL { directory.appendingPathComponent("claude.json") }
     public static var providersURL: URL { directory.appendingPathComponent("Providers", isDirectory: true) }
+    public static var historyURL: URL { directory.appendingPathComponent("history.json") }
     public static func prepare() throws {
         try FileManager.default.createDirectory(at: providersURL, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
         try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: directory.path)
     }
+
+    public static func readHistory() throws -> [QuotaHistorySample] {
+        guard FileManager.default.fileExists(atPath: historyURL.path) else { return [] }
+        let size = try historyURL.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        guard size <= 5_000_000 else { throw QuotaError.message("历史数据超过 5 MB") }
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode([QuotaHistorySample].self, from: Data(contentsOf: historyURL)).suffix(5_000).sorted { $0.date < $1.date }
+    }
+    public static func writeHistory(_ history: [QuotaHistorySample]) throws {
+        try prepare()
+        let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601; encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        try encoder.encode(history.suffix(5_000)).write(to: historyURL, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: historyURL.path)
+    }
+
     public static func read(_ url: URL) throws -> QuotaSnapshot {
         let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
         guard size <= 1_000_000 else { throw QuotaError.message("额度文件超过 1 MB") }
