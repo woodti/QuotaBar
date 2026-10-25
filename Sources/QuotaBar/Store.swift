@@ -163,8 +163,11 @@ import QuotaCore
         if let data = try? Data(contentsOf: LocalStore.claudeURL),
            let snapshot = try? QuotaParser.decodeSnapshot(data), !snapshot.windows.isEmpty {
             lines.append("Claude 额度：已收到 \(snapshot.windows.count) 个窗口")
+            lines.append("Claude 快照：\(snapshot.stale(at: now) ? "超过 3 分钟未更新" : "最近已更新")")
+        } else if FileManager.default.fileExists(atPath: LocalStore.claudeURL.path) {
+            lines.append("Claude 额度：已有快照但没有可显示窗口；请完成一次新对话")
         } else {
-            lines.append("Claude 额度：等待一次 Claude Code 对话")
+            lines.append("Claude 额度：尚未生成本地快照；请完成一次 Claude Code 对话")
         }
         lines.append("下一步：Codex 未找到时选择可执行文件；Claude 等待额度时完成一次对话。")
         notice = lines.joined(separator: "\n")
