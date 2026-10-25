@@ -22,4 +22,4 @@ swift run QuotaBar --demo
 
 ## 发布
 
-正式发布仅包含 Apple Silicon 包。CI 产物未公证，不能作为已公证发布包。发布者应使用自己的 Developer ID Application 证书、公证并验证 Gatekeeper，再上传安装包及 SHA-256 校验文件。
+正式发布仅包含 Apple Silicon 的已公证 DMG。CI 产物未公证，不能作为公开安装包。发布者应使用自己的 Developer ID Application 证书、公证并验证 Gatekeeper；GitHub Release 只上传最终 DMG，校验文件可作为可选附加资产，不上传临时 ZIP 或源码压缩包。
