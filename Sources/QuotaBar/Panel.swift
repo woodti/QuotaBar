@@ -181,7 +181,7 @@ struct Panel: View {
             Button("打开数据源文件夹") { store.openProviders() }.controlSize(.small)
             Button("运行连接检查") { store.runSelfCheck() }.controlSize(.small)
             Button("查看最新版本和更新说明") { store.openLatestRelease() }.controlSize(.small)
-            Text("QuotaBar 0.2.7 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
+            Text("QuotaBar 0.2.8 · MIT 开源许可").font(.system(size: 10)).foregroundStyle(.tertiary)
         }.font(.system(size: 12))
     }
     private var welcomeCard: some View {
