@@ -128,6 +128,7 @@ import QuotaCore
         let selectedPath = codexPath.isEmpty ? "自动查找" : URL(fileURLWithPath: codexPath).lastPathComponent
         let detected = CodexClient.executable(override: codexPath).map { URL(fileURLWithPath: $0).lastPathComponent } ?? "未找到"
         let snapshotSummary = snapshots.map { "\($0.id):\($0.windows.count) 个窗口" }.joined(separator: ", ")
+        let claudeSnapshot = snapshots.first(where: { $0.id == "claude" })
         let text = [
             "QuotaBar 0.2.8",
             "macOS：\(ProcessInfo.processInfo.operatingSystemVersionString)",
@@ -135,6 +136,8 @@ import QuotaCore
             "检测到 Codex：\(detected)",
             "刷新间隔：\(Int(interval)) 秒",
             "已有数据：\(snapshotSummary.isEmpty ? "无" : snapshotSummary)",
+            "Claude 接入：\(claudeBridgeInstalled ? "已接入" : "未接入")",
+            "Claude 快照：\(claudeSnapshot.map { $0.stale(at: now) ? "旧数据" : "新数据" } ?? "无")",
             "错误：\(codexError ?? "无")"
         ].joined(separator: "\n")
         NSPasteboard.general.clearContents()
