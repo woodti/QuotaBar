@@ -185,7 +185,11 @@ struct Panel: View {
             Divider()
             Text("Claude Code 状态").font(.system(size: 12, weight: .semibold))
             if store.claudeBridgeInstalled {
-                Label(store.snapshots.contains(where: { $0.id == "claude" && !$0.windows.isEmpty }) ? "已接入，额度已同步" : "已接入，等待一次 Claude 对话", systemImage: "checkmark.circle.fill")
+                let claude = store.snapshots.first(where: { $0.id == "claude" })
+                let status = claude?.windows.isEmpty == false
+                    ? (claude?.stale(at: store.now) == true ? "已接入，额度较旧" : "已接入，额度已同步")
+                    : "已接入，等待一次 Claude 对话"
+                Label(status, systemImage: "checkmark.circle.fill")
                     .foregroundStyle(.green).font(.system(size: 11))
                 Text("Claude 只有在首次 API 响应后才会提供额度字段。完成一次对话后，QuotaBar 会自动更新。")
                     .font(.system(size: 10)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
