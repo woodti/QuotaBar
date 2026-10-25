@@ -110,6 +110,7 @@ struct Panel: View {
                 HStack(spacing: 8) {
                     Button("立即刷新") { store.refresh() }.controlSize(.small)
                     Button("打开设置") { store.settings = true }.controlSize(.small)
+                    Button("反馈接入问题") { store.openFeedback() }.controlSize(.small)
                 }
             }
             ForEach(snapshot.windows) { window in
