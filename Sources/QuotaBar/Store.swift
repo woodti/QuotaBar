@@ -114,6 +114,9 @@ import QuotaCore
             } else {
                 notice = result
             }
+            // Re-read the local Claude snapshot immediately so an existing
+            // rate_limits record appears without waiting for the next timer.
+            refresh()
         }
         catch { notice = error.localizedDescription }
     }
