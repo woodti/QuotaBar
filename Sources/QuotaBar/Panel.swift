@@ -92,7 +92,7 @@ struct Panel: View {
                 }
             }
             if snapshot.windows.isEmpty {
-                Text("暂未收到额度。请在支持额度的 Claude Code 订阅账户中完成一次对话。").font(.system(size: 11)).foregroundStyle(.secondary)
+                Text("暂未收到额度。请确认已接入 Claude Code，然后在支持额度的订阅账户中完成一次对话；首次 API 响应后，Claude Code 才会写入 rate_limits。若仍为空，请在设置里重新接入并检查状态栏命令。").font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
             }
             ForEach(snapshot.windows) { window in
                 let expired = window.expired(at: store.now)
