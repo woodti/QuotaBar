@@ -135,7 +135,9 @@ struct Panel: View {
         case "free", "basic": return "基础版"
         case "plus": return "Plus"
         case "pro": return "Pro"
-        case "prolite": return "Pro Lite"
+        // `prolite` is a service-side label, not an official public plan name.
+        // Keep the raw label visible while explaining that it maps to Pro.
+        case "prolite": return "Pro（服务标记：Pro Lite）"
         case "team": return "Team"
         case "business": return "Business"
         case "enterprise": return "Enterprise"

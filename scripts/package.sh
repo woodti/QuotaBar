@@ -10,6 +10,7 @@ BIN="$(swift build -c release --arch "$ARCH" --show-bin-path)/QuotaBar"
 APP="$DEST/QuotaBar.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/QuotaBar"
+if [[ -f "$PWD/Resources/AppIcon.icns" ]]; then cp "$PWD/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"; fi
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -18,6 +19,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <key>CFBundleIdentifier</key><string>io.quotabar.menubar</string>
 <key>CFBundleName</key><string>QuotaBar</string>
 <key>CFBundleDisplayName</key><string>QuotaBar</string>
+<key>CFBundleIconFile</key><string>AppIcon</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>0.2.7</string>
 <key>CFBundleVersion</key><string>1</string>

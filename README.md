@@ -18,7 +18,7 @@
 - Codex：通过官方 `codex app-server` 的 `account/rateLimits/read` 查询账户用量，默认每 60 秒刷新，可选 30 / 120 秒。
 - Claude：通过官方 Claude Code status line 的 `rate_limits` 字段同步五小时、七天和支出上限窗口；使用时更新，非独立云端轮询。
 - 显示剩余百分比、进度条、重置倒计时、多额度池、更新时间。支持浅色 / 深色系统外观。
-- Codex 卡片显示服务返回的套餐类型（例如 Pro、Plus、Pro Lite、基础版）和只读授权状态。未知套餐标签原样显示；服务未返回该字段时不猜测。
+- Codex 卡片显示服务返回的套餐类型和只读授权状态。官方公开名称按 Free/基础版、Plus、Pro 等显示；如果服务返回 `Pro Lite`，这是服务端内部标记，界面会写成“Pro（服务标记：Pro Lite）”，不会把它当成新的官方套餐。OpenAI 的 Pro 具体档位（如 Pro 100/200/500）以账户页面为准，QuotaBar 不会根据额度猜测档位。
 - 菜单栏可显示 Codex、Claude 或两者；显示所有有效窗口中最少的剩余额度。
 - 超过三分钟的快照标记为旧数据；重置时间到达后等待服务确认，不自行假设额度恢复。失败和未知值不会被当成零或 100%。
 - 登录时启动、睡眠唤醒刷新、手动刷新、可自选 Codex 路径。
@@ -26,7 +26,7 @@
 
 ## 安装
 
-需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从 [最新 Release](https://github.com/woodti/QuotaBar/releases/latest) 下载 `QuotaBar-0.2.7-macos-arm64-notarized.dmg`，打开后将 QuotaBar 拖入 Applications，再打开。菜单栏会出现图表图标和 `CX` / `CL` 额度。
+需要 macOS 13 或以上及 Apple Silicon（M 系列芯片）。从 [最新 Release](https://github.com/woodti/QuotaBar/releases/latest) 下载唯一的 DMG 安装包，打开后把 QuotaBar 拖到窗口里的 Applications 文件夹，再从“应用程序”打开。DMG 已包含应用图标和标准安装引导；菜单栏会出现图表图标和 `CX` / `CL` 额度。
 
 首次使用：
 
@@ -36,7 +36,7 @@
 
 QuotaBar 只读取 Codex CLI 自己的登录状态，不会复制凭证。读取失败时，面板会保留旧数据并显示“打开设置”和“重试”入口；请在提交问题时附上错误文字、macOS 版本和 Codex 版本，不要附带 token、Cookie 或账户文件。
 
-正式发布包已使用 Developer ID 签名并通过 Apple 公证。支持显示账户实际提供的额度窗口；套餐不提供 5 小时限额时不会显示该窗口。
+正式发布包已使用 Developer ID 签名并通过 Apple 公证。OpenAI 官方当前公开的 ChatGPT Pro 档位包括 Pro 100、Pro 200 和 Pro 500；Pro 200 的额度高于 Pro 100，Pro 500 另含更高等级能力。QuotaBar 只显示服务实际返回的套餐标签和额度窗口，不会把“Pro Lite”解释成官方档位，也不会在服务不提供 5 小时限额时自行补出该窗口。
 
 | 项目 | 要求和表现 |
 | --- | --- |
