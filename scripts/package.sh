@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 ARCH="${1:-arm64}"
 DEST="${2:-$PWD/dist}"
+if [[ "$ARCH" != "arm64" ]]; then echo "QuotaBar public packaging supports Apple Silicon arm64 only" >&2; exit 1; fi
 mkdir -p "$DEST"
 DEST="$(cd "$DEST" && pwd)"
 swift build -c release --arch "$ARCH"
