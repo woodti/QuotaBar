@@ -40,7 +40,10 @@ struct Panel: View {
                             VStack(alignment: .leading, spacing: 10) {
                                 Label("连接 Claude", systemImage: "sparkle").font(.system(size: 13, weight: .semibold))
                                 Text("通过 Claude Code 状态栏同步额度。接入时备份设置，并保留原有状态栏输出。").font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                                Button("接入 Claude Code") { store.connectClaude() }.controlSize(.small)
+                                HStack(spacing: 8) {
+                                    Button("接入 Claude Code") { store.connectClaude() }.controlSize(.small)
+                                    Button("反馈接入问题") { store.openFeedback() }.controlSize(.small)
+                                }
                             }.frame(maxWidth: .infinity, alignment: .leading).padding(16).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                         }
                         if let error = store.localError { message("本地数据提示", error, icon: "doc.badge.ellipsis") }
