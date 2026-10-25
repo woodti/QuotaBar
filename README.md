@@ -84,6 +84,8 @@ API Key 账户不等同于 ChatGPT 订阅额度。若服务不返回百分比窗
 3. 已有状态栏命令会收到原始 stdin，并继续显示原来的输出。QuotaBar 仅保存额度字段和时间，不保存会话正文。
 4. 使用支持 `rate_limits` 的新版 Claude Code，在支持的订阅账户中完成一次对话。官方字段通常只在首次 API 响应之后出现；某些账户不提供这些字段。
 
+如果连接检查显示“尚未生成本地快照”，先完成一次 Claude Code 对话；如果显示“已有快照但没有可显示窗口”，请重新开始一次对话让 Claude Code 写入新的 `rate_limits`；如果显示快照超过 3 分钟未更新，请确认 QuotaBar 仍安装在 `/Applications`，再从设置中重新接入状态栏命令。
+
 Claude 停用时不会主动联网查询，旧数据会明确标注。移动 / 删除应用会使状态栏命令路径失效。卸载前，从 `settings.json.quotabar-backup-*` 恢复原来的 `statusLine` 字段（保留之后其他设置改动），或者删除 QuotaBar 新增的 `statusLine` 字段。
 
 ## 开发
