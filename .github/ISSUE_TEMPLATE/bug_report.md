@@ -41,3 +41,7 @@ assignees: ""
 ## 其他信息
 
 <!-- 可补充 Claude Code/Codex 版本、是否刚完成登录或首次对话。请不要提交凭证、提示词或代码。 -->
+
+- macOS 版本：
+- 芯片（M1/M2/M3/M4）：
+- QuotaBar 版本：
