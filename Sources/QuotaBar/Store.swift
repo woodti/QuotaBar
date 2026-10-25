@@ -175,7 +175,11 @@ import QuotaCore
         } else {
             lines.append("Claude 额度：尚未生成本地快照；请完成一次 Claude Code 对话")
         }
-        lines.append("下一步：Codex 未找到时选择可执行文件；Claude 等待额度时完成一次对话。")
+        if !claudeBridgeInstalled {
+            lines.append("下一步：Codex 未找到时选择可执行文件；Claude 未接入时先点击‘接入 Claude Code’。")
+        } else {
+            lines.append("下一步：Codex 未找到时选择可执行文件；Claude 等待额度时完成一次对话。")
+        }
         notice = lines.joined(separator: "\n")
     }
     func toggleLogin(_ enabled: Bool) {
