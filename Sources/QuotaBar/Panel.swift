@@ -106,6 +106,12 @@ struct Panel: View {
                     }
                 }
             }
+            if snapshot.id == "claude" && stale && !snapshot.windows.isEmpty {
+                HStack(spacing: 8) {
+                    Button("立即刷新") { store.refresh() }.controlSize(.small)
+                    Button("打开设置") { store.settings = true }.controlSize(.small)
+                }
+            }
             ForEach(snapshot.windows) { window in
                 let expired = window.expired(at: store.now)
                 let color = stale || expired ? Color.secondary : window.remaining <= 10 ? Color.red : window.remaining <= 25 ? Color.orange : accent
