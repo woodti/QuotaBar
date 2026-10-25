@@ -81,6 +81,7 @@ API Key 账户不等同于 ChatGPT 订阅额度。若服务不返回百分比窗
 
 1. 先将应用固定安装到 `/Applications`。
 2. 点击应用里的「接入 Claude Code」。程序会备份 `~/.claude/settings.json`，并添加 `statusLine` 命令；设置中的其他字段保持原样。支持通过环境变量 `CLAUDE_CONFIG_DIR` 指定配置目录（Finder 启动时通常没有终端环境变量）。
+   接入完成后应用会立即重新读取已有的本地额度快照；如果之前已经产生过 `rate_limits`，不必等待下一次定时刷新。
 3. 已有状态栏命令会收到原始 stdin，并继续显示原来的输出。QuotaBar 仅保存额度字段和时间，不保存会话正文。
 4. 使用支持 `rate_limits` 的新版 Claude Code，在支持的订阅账户中完成一次对话。官方字段通常只在首次 API 响应之后出现；某些账户不提供这些字段。
 
