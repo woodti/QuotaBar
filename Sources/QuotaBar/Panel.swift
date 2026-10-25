@@ -99,6 +99,12 @@ struct Panel: View {
                     ? "暂未收到额度。请确认已接入 Claude Code，然后在支持额度的订阅账户中完成一次对话；首次 API 响应后，Claude Code 才会写入 rate_limits。若仍为空，请在设置里重新接入并检查状态栏命令。"
                     : "暂未收到额度。请检查登录状态和可用的额度窗口，然后点击刷新。"
                 Text(emptyMessage).font(.system(size: 11)).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                if snapshot.id == "claude" {
+                    HStack(spacing: 8) {
+                        Button("打开设置") { store.settings = true }.controlSize(.small)
+                        Button("反馈接入问题") { store.openFeedback() }.controlSize(.small)
+                    }
+                }
             }
             ForEach(snapshot.windows) { window in
                 let expired = window.expired(at: store.now)
