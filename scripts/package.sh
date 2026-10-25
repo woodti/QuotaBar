@@ -10,7 +10,8 @@ BIN="$(swift build -c release --arch "$ARCH" --show-bin-path)/QuotaBar"
 APP="$DEST/QuotaBar.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/QuotaBar"
-if [[ -f "$PWD/Resources/AppIcon.icns" ]]; then cp "$PWD/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"; fi
+if [[ ! -f "$PWD/Resources/AppIcon.icns" ]]; then echo "missing Resources/AppIcon.icns" >&2; exit 1; fi
+cp "$PWD/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
