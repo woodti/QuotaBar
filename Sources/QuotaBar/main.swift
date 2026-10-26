@@ -51,7 +51,7 @@ if args.contains("--check-codex") {
         popover.behavior = .transient
         item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = item.button {
-            button.image = NSImage(systemSymbolName: "chart.bar.xaxis", accessibilityDescription: "QuotaBar 剩余额度")
+            button.image = statusItemImage()
             button.imagePosition = .imageLeading
             button.font = .monospacedDigitSystemFont(ofSize: 11, weight: .medium)
             button.target = self; button.action = #selector(toggle)
@@ -62,6 +62,20 @@ if args.contains("--check-codex") {
         }.store(in: &subscriptions)
         item.button?.title = store.menuTitle
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(wake), name: NSWorkspace.didWakeNotification, object: nil)
+    }
+    private func statusItemImage() -> NSImage {
+        let image = NSImage(size: NSSize(width: 18, height: 18))
+        image.lockFocus()
+        NSColor.black.setStroke()
+        let baseline = NSBezierPath(); baseline.move(to: NSPoint(x: 2, y: 3)); baseline.line(to: NSPoint(x: 16, y: 3)); baseline.lineWidth = 1.5; baseline.stroke()
+        for (x, height) in [(4.0, 7.0), (8.5, 12.0), (13.0, 9.0)] {
+            let bar = NSBezierPath(roundedRect: NSRect(x: x, y: 3, width: 2.5, height: height), xRadius: 1, yRadius: 1)
+            bar.fill()
+        }
+        image.unlockFocus()
+        image.isTemplate = true
+        image.accessibilityDescription = "QuotaBar 剩余额度"
+        return image
     }
     @objc func wake() { store.refresh() }
     @objc func toggle() {
