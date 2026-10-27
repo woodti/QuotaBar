@@ -51,7 +51,10 @@ if args.contains("--check-codex") {
         popover.behavior = .transient
         item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = item.button {
-            button.image = statusItemImage()
+            let bundledIcon = NSImage(named: NSImage.Name("AppIcon"))
+            bundledIcon?.isTemplate = false
+            button.image = bundledIcon ?? statusItemImage()
+            button.imageScaling = .scaleProportionallyDown
             button.imagePosition = .imageLeading
             button.font = .monospacedDigitSystemFont(ofSize: 11, weight: .medium)
             button.target = self; button.action = #selector(toggle)
